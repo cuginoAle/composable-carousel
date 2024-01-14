@@ -1,0 +1,44 @@
+{
+  "name": "react-typescript",
+  "version": "1.0.0",
+  "description": "React and TypeScript example starter project",
+  "keywords": [
+    "typescript",
+    "react",
+    "starter"
+  ],
+  "main": "src/index.tsx",
+  "dependencies": {
+    "loader-utils": "3.2.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-scripts": "latest",
+    "tailwind": "4.0.0",
+    "tailwindcss": "3.4.1"
+  },
+  "devDependencies": {
+    "@types/react": "18.2.37",
+    "@types/react-dom": "18.2.15",
+    "@typescript-eslint/eslint-plugin": "^6.9.1",
+    "@typescript-eslint/parser": "^6.9.1",
+    "eslint": "^8.52.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.4",
+    "typescript": "4.4.2",
+    "@babel/plugin-proposal-private-property-in-object": "^7.16.7"
+  },
+  "scripts": {
+    "prestart": "npm run build:tailwind",
+    "prebuild": "npm run build:tailwind",
+    "start": "npm run build:tailwind && react-scripts start",
+    "build": "npm run build:tailwind && react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "build:tailwind": "tailwind build -i src/styles.css -c src/tailwind.config.js -o src/tailwind.output.css"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not ie <= 11"
+  ]
+}
