@@ -551,6 +551,22 @@ video {
   display: flex;
 }
 
+.h-96 {
+  height: 24rem;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.w-96 {
+  width: 24rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
 .max-w-full {
   max-width: 100%;
 }
@@ -559,12 +575,24 @@ video {
   flex-shrink: 0;
 }
 
+.snap-none {
+  scroll-snap-type: none;
+}
+
 .snap-x {
   scroll-snap-type: x var(--tw-scroll-snap-strictness);
 }
 
 .snap-mandatory {
   --tw-scroll-snap-strictness: mandatory;
+}
+
+.snap-start {
+  scroll-snap-align: start;
+}
+
+.snap-end {
+  scroll-snap-align: end;
 }
 
 .snap-center {
@@ -585,6 +613,10 @@ video {
 
 .overflow-auto {
   overflow: auto;
+}
+
+.object-cover {
+  object-fit: cover;
 }
 
 .p-10 {

@@ -3,19 +3,34 @@ import { Root } from '../carousel';
 import { CarouselItem } from '../carouselItem';
 import { useCarousel } from '../useCarousel';
 
-interface Carousel1Props {
-  items: React.ReactNode[];
-}
-const Carousel1 = ({ items }: Carousel1Props) => {
+// Some dummy items to fill the carousel:
+const items = new Array(10).fill(0).map((_, index) => {
+  return (
+    <a href="https://picsum.photos" key={index} className="block w-96 h-96">
+      <img
+        className="block object-cover w-full h-full "
+        src={`https://picsum.photos/seed/${index}/600/300`}
+        alt=""
+      />
+    </a>
+  );
+});
+
+const Carousel1 = () => {
   const rootRef = React.useRef<HTMLUListElement>(null);
 
-  const { visibleIndexes, scrollToIndex } = useCarousel({
+  const {
+    scrollToIndex,
+    prevItemIndex,
+    nextItemIndex,
+    prevPageItemIndex,
+    nextPageItemIndex,
+    isFirstPage,
+    isLastPage,
+  } = useCarousel({
     rootRef,
+    snapPosition: 'start',
   });
-
-  const prevIndex = visibleIndexes[0] - 1;
-  const nextIndex = visibleIndexes.slice(-1)[0] + 1;
-  console.log(prevIndex, nextIndex, visibleIndexes);
 
   return (
     <div className="relative">
@@ -28,17 +43,33 @@ const Carousel1 = ({ items }: Carousel1Props) => {
       </Root>
       <div className="flex gap-2">
         <button
-          disabled={prevIndex < 0}
-          onClick={() => scrollToIndex(prevIndex)}
+          disabled={isFirstPage}
+          onClick={() => scrollToIndex(prevItemIndex)}
         >
           ⬅️
         </button>
 
         <button
-          disabled={nextIndex === items.length}
-          onClick={() => scrollToIndex(nextIndex)}
+          disabled={isLastPage}
+          onClick={() => scrollToIndex(nextItemIndex)}
         >
           ➡️
+        </button>
+      </div>
+
+      <div className="flex gap-2">
+        <button
+          disabled={isFirstPage}
+          onClick={() => scrollToIndex(prevPageItemIndex)}
+        >
+          ⬅️⬅️
+        </button>
+
+        <button
+          disabled={isLastPage}
+          onClick={() => scrollToIndex(nextPageItemIndex)}
+        >
+          ➡️➡️
         </button>
       </div>
     </div>
