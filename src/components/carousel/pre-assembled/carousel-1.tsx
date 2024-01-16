@@ -9,7 +9,7 @@ const items = new Array(20).fill(0).map((_, index) => {
     <a
       href="https://picsum.photos"
       key={index}
-      className="block h-96"
+      className="block h-96 overflow-hidden rounded-md w-96 relative"
       style={{ width: Math.random() * 300 + 200, maxWidth: '100%' }}
     >
       <img
@@ -17,6 +17,9 @@ const items = new Array(20).fill(0).map((_, index) => {
         src={`https://picsum.photos/seed/${Math.random() * 10}/600/300`}
         alt=""
       />
+      <span className="absolute left-1/2 top-1/2 text-5xl opacity-50 text-red-800">
+        {index}
+      </span>
     </a>
   );
 });
@@ -26,37 +29,47 @@ const Carousel1 = () => {
 
   const {
     scrollToIndex,
-    prevItemIndex,
-    nextItemIndex,
+    scrollNextPage,
+    scrollPrevPage,
+    scrollNext,
+    scrollPrev,
     isFirstPage,
     isLastPage,
   } = useCarousel({
     rootRef,
-    snapPosition: 'start',
+    snapPosition: 'center',
   });
 
   return (
     <div className="relative">
-      <Root ref={rootRef} className="gap-4">
+      <Root ref={rootRef} className="gap-4 pb-8">
         {items.map((node, index) => (
-          <CarouselItem key={index} className="shrink-0">
+          <CarouselItem
+            key={index}
+            className="shrink-0 rounded-md shadow-sm shadow-neutral-800"
+          >
             {node}
           </CarouselItem>
         ))}
       </Root>
       <div className="flex gap-2">
-        <button
-          disabled={isFirstPage}
-          onClick={() => scrollToIndex(prevItemIndex)}
-        >
+        <button disabled={isFirstPage} onClick={scrollPrev}>
           ⬅️
         </button>
 
-        <button
-          disabled={isLastPage}
-          onClick={() => scrollToIndex(nextItemIndex)}
-        >
+        <button disabled={isLastPage} onClick={scrollNext}>
           ➡️
+        </button>
+
+        <button disabled={isLastPage} onClick={() => scrollNextPage()}>
+          ➡️➡️
+        </button>
+        <button disabled={isFirstPage} onClick={() => scrollPrevPage()}>
+          ⬅️⬅️
+        </button>
+
+        <button disabled={isLastPage} onClick={() => scrollToIndex(12)}>
+          ➡️➡️
         </button>
       </div>
     </div>

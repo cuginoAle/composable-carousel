@@ -14,11 +14,17 @@ const useCarousel = ({
   scrollToIndex: ScrollToIndexProps;
   prevItemIndex: number;
   nextItemIndex: number;
+  scrollNext: () => void;
+  scrollPrev: () => void;
+  scrollNextPage: () => void;
+  scrollPrevPage: () => void;
   isFirstPage: boolean;
   isLastPage: boolean;
 } => {
   const [carouselItems, setCarouselItems] = React.useState<Element[]>([]);
-  const [visibleIndexes, setVisible] = React.useState(new Set<number>([0]));
+  const [visibleIndexes, setVisibleIndexes] = React.useState(
+    new Set<number>([0]),
+  );
 
   useEffect(() => {
     if (rootRef.current) {
@@ -30,19 +36,21 @@ const useCarousel = ({
       setCarouselItems(C);
       const options = {
         root: rootRef.current,
-        threshold: 1.0,
+        // I found that sometimes the intersectionRatio is like 0.98999 for fully visible elements,
+        // wrong rounding maybe caused by the snap scroll engine??
+        threshold: [1.0, 0.98],
       };
 
       const observer = new IntersectionObserver((e) => {
         e.forEach((entry) => {
-          if (entry.intersectionRatio === 1) {
+          if (entry.isIntersecting) {
             visibleIndexes.add(C.indexOf(entry.target));
           } else {
             visibleIndexes.delete(C.indexOf(entry.target));
           }
         });
         const newSet = new Set(visibleIndexes.values());
-        if (newSet.size > 0) setVisible(newSet);
+        if (newSet.size > 0) setVisibleIndexes(newSet);
       }, options);
 
       C.forEach((target) => {
@@ -51,7 +59,9 @@ const useCarousel = ({
     }
   }, [rootRef.current]);
 
-  const sortedVisibleIndexesArray = Array.from(visibleIndexes.values()).sort();
+  const sortedVisibleIndexesArray = Array.from(visibleIndexes.values()).sort(
+    (a, b) => a - b,
+  );
 
   const prevItemIndex = Math.max(sortedVisibleIndexesArray[0] - 1, 0);
   const nextItemIndex = Math.min(
@@ -60,34 +70,52 @@ const useCarousel = ({
   );
 
   const scrollToIndex: ScrollToIndexProps = (index) => {
-    const sign = Math.sign(index - sortedVisibleIndexesArray[0]);
-
-    // calculating the distance of the passed index from the nearest visible index
-    const delta = Math.min(
-      ...sortedVisibleIndexesArray.map((i) => Math.abs(index - i)),
-    );
-
-    // ******* ASSUMING ALL THE CARDS HAVE THE SAME WIDTH *******
-    // const cardWidth = carouselItems[0].getBoundingClientRect().width;
-    const cardWidth = carouselItems
-      .filter((_el, i) => {
-        // console.log(sign, i, index, sortedVisibleIndexesArray[0]);
-        if (sign === 1) {
-          return i > sortedVisibleIndexesArray.slice(-1)[0] && i <= index;
-        } else {
-          return i >= index && i < sortedVisibleIndexesArray[0];
-        }
-      })
-      .reduce((acc, el) => acc + el.getBoundingClientRect().width, 0);
-
+    carouselItems[index].scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'start',
+    });
+  };
+  const scrollNext = () => {
     rootRef.current?.scrollBy({
-      left: delta * cardWidth * sign,
+      left: carouselItems[sortedVisibleIndexesArray[0]].getBoundingClientRect()
+        .width,
+      behavior: 'smooth',
+    });
+  };
+  const scrollPrev = () => {
+    rootRef.current?.scrollBy({
+      left: -carouselItems[
+        sortedVisibleIndexesArray[0] - 1
+      ].getBoundingClientRect().width,
+      behavior: 'smooth',
+    });
+  };
+
+  const scrollNextPage = () => {
+    rootRef.current?.scrollBy({
+      left: sortedVisibleIndexesArray.reduce((acc, curr) => {
+        return acc + carouselItems[curr].getBoundingClientRect().width;
+      }, 0),
+      behavior: 'smooth',
+    });
+  };
+
+  const scrollPrevPage = () => {
+    rootRef.current?.scrollBy({
+      left: -sortedVisibleIndexesArray.reduce((acc, curr) => {
+        return acc + carouselItems[curr].getBoundingClientRect().width;
+      }, 0),
       behavior: 'smooth',
     });
   };
   return {
     visibleIndexes: sortedVisibleIndexesArray,
+    scrollNext,
+    scrollPrev,
     scrollToIndex,
+    scrollNextPage,
+    scrollPrevPage,
     prevItemIndex,
     nextItemIndex,
     isFirstPage: sortedVisibleIndexesArray[0] === 0,
