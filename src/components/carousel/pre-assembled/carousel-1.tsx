@@ -1,7 +1,5 @@
 import React from 'react';
-import { Root } from '../carousel';
-import { CarouselItem } from '../carouselItem';
-import { useCarousel } from '../useCarousel';
+import { Carousel } from '../';
 
 // Some dummy items to fill the carousel:
 const items = new Array(20).fill(0).map((_, index) => {
@@ -35,23 +33,31 @@ const Carousel1 = () => {
     scrollPrev,
     isFirstPage,
     isLastPage,
-  } = useCarousel({
+    visibleIndexes,
+  } = Carousel.useCarousel({
     rootRef,
     snapPosition: 'center',
   });
 
   return (
     <div className="relative">
-      <Root ref={rootRef} className="gap-4 pb-8">
+      <Carousel.Root ref={rootRef} className="gap-4 pb-8">
         {items.map((node, index) => (
-          <CarouselItem
-            key={index}
-            className="shrink-0 rounded-md shadow-sm shadow-neutral-800"
-          >
-            {node}
-          </CarouselItem>
+          <Carousel.Slide key={index}>
+            <div
+              className={`
+              shrink-0 rounded-md shadow-sm shadow-neutral-800
+              transition-all ${
+                visibleIndexes.includes(index)
+                  ? 'opacity-100 scale-y-100'
+                  : 'opacity-40 scale-y-90'
+              }`}
+            >
+              {node}
+            </div>
+          </Carousel.Slide>
         ))}
-      </Root>
+      </Carousel.Root>
       <div className="flex gap-2">
         <button disabled={isFirstPage} onClick={scrollPrev}>
           ⬅️
