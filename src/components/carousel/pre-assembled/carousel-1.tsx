@@ -4,12 +4,17 @@ import { CarouselItem } from '../carouselItem';
 import { useCarousel } from '../useCarousel';
 
 // Some dummy items to fill the carousel:
-const items = new Array(10).fill(0).map((_, index) => {
+const items = new Array(20).fill(0).map((_, index) => {
   return (
-    <a href="https://picsum.photos" key={index} className="block w-96 h-96">
+    <a
+      href="https://picsum.photos"
+      key={index}
+      className="block h-96"
+      style={{ width: Math.random() * 300 + 200, maxWidth: '100%' }}
+    >
       <img
-        className="block object-cover w-full h-full "
-        src={`https://picsum.photos/seed/${index}/600/300`}
+        className="block object-cover w-full h-full object-center "
+        src={`https://picsum.photos/seed/${Math.random() * 10}/600/300`}
         alt=""
       />
     </a>
@@ -23,8 +28,6 @@ const Carousel1 = () => {
     scrollToIndex,
     prevItemIndex,
     nextItemIndex,
-    prevPageItemIndex,
-    nextPageItemIndex,
     isFirstPage,
     isLastPage,
   } = useCarousel({
@@ -54,22 +57,6 @@ const Carousel1 = () => {
           onClick={() => scrollToIndex(nextItemIndex)}
         >
           ➡️
-        </button>
-      </div>
-
-      <div className="flex gap-2">
-        <button
-          disabled={isFirstPage}
-          onClick={() => scrollToIndex(prevPageItemIndex)}
-        >
-          ⬅️⬅️
-        </button>
-
-        <button
-          disabled={isLastPage}
-          onClick={() => scrollToIndex(nextPageItemIndex)}
-        >
-          ➡️➡️
         </button>
       </div>
     </div>

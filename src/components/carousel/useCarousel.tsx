@@ -14,21 +14,11 @@ const useCarousel = ({
   scrollToIndex: ScrollToIndexProps;
   prevItemIndex: number;
   nextItemIndex: number;
-  prevPageItemIndex: number;
-  nextPageItemIndex: number;
   isFirstPage: boolean;
   isLastPage: boolean;
 } => {
   const [carouselItems, setCarouselItems] = React.useState<Element[]>([]);
   const [visibleIndexes, setVisible] = React.useState(new Set<number>([0]));
-
-  const scrollToIndex: ScrollToIndexProps = (index) => {
-    carouselItems[index]?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'nearest',
-      inline: 'nearest',
-    });
-  };
 
   useEffect(() => {
     if (rootRef.current) {
@@ -68,21 +58,38 @@ const useCarousel = ({
     sortedVisibleIndexesArray.slice(-1)[0] + 1,
     carouselItems.length - 1,
   );
-  const prevPageItemIndex = Math.max(
-    sortedVisibleIndexesArray[0] - sortedVisibleIndexesArray.length,
-    0,
-  );
-  const nextPageItemIndex = Math.min(
-    sortedVisibleIndexesArray.slice(-1)[0] + sortedVisibleIndexesArray.length,
-    carouselItems.length - 1,
-  );
+
+  const scrollToIndex: ScrollToIndexProps = (index) => {
+    const sign = Math.sign(index - sortedVisibleIndexesArray[0]);
+
+    // calculating the distance of the passed index from the nearest visible index
+    const delta = Math.min(
+      ...sortedVisibleIndexesArray.map((i) => Math.abs(index - i)),
+    );
+
+    // ******* ASSUMING ALL THE CARDS HAVE THE SAME WIDTH *******
+    // const cardWidth = carouselItems[0].getBoundingClientRect().width;
+    const cardWidth = carouselItems
+      .filter((_el, i) => {
+        // console.log(sign, i, index, sortedVisibleIndexesArray[0]);
+        if (sign === 1) {
+          return i > sortedVisibleIndexesArray.slice(-1)[0] && i <= index;
+        } else {
+          return i >= index && i < sortedVisibleIndexesArray[0];
+        }
+      })
+      .reduce((acc, el) => acc + el.getBoundingClientRect().width, 0);
+
+    rootRef.current?.scrollBy({
+      left: delta * cardWidth * sign,
+      behavior: 'smooth',
+    });
+  };
   return {
     visibleIndexes: sortedVisibleIndexesArray,
     scrollToIndex,
     prevItemIndex,
     nextItemIndex,
-    prevPageItemIndex,
-    nextPageItemIndex,
     isFirstPage: sortedVisibleIndexesArray[0] === 0,
     isLastPage:
       sortedVisibleIndexesArray.slice(-1)[0] === carouselItems.length - 1,
