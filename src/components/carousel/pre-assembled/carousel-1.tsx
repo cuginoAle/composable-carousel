@@ -8,7 +8,7 @@ const items = new Array(20).fill(0).map((_, index) => {
       href="https://picsum.photos"
       key={index}
       className="block h-96 overflow-hidden rounded-md w-96 relative"
-      style={{ width: Math.random() * 300 + 200, maxWidth: '100%' }}
+      // style={{ width: Math.random() * 300 + 200, maxWidth: '100%' }}
     >
       <img
         className="block object-cover w-full h-full object-center "
@@ -36,7 +36,7 @@ const Carousel1 = () => {
     visibleIndexes,
   } = Carousel.useCarousel({
     rootRef,
-    snapPosition: 'center',
+    snapPosition: 'start',
   });
 
   return (
@@ -46,11 +46,9 @@ const Carousel1 = () => {
           <Carousel.Slide key={index}>
             <div
               className={`
-              shrink-0 rounded-md shadow-sm shadow-neutral-800
+              shrink-0 rounded-md shadow-sm shadow-neutral-800 duration-500
               transition-all ${
-                visibleIndexes.includes(index)
-                  ? 'opacity-100 scale-y-100'
-                  : 'opacity-40 scale-y-90'
+                visibleIndexes.includes(index) ? 'opacity-100' : 'opacity-20'
               }`}
             >
               {node}
