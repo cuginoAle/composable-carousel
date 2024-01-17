@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 
 interface UseCarouselProps {
-  rootRef: React.RefObject<HTMLUListElement>;
   snapPosition?: 'start' | 'end' | 'center';
+  axis?: 'x' | 'y';
 }
 type ScrollToIndexProps = (index: number) => void;
 
 const useCarousel = ({
-  rootRef,
   snapPosition = 'start',
+  axis = 'x',
 }: UseCarouselProps): {
   visibleIndexes: number[];
   scrollToIndex: ScrollToIndexProps;
@@ -20,22 +20,31 @@ const useCarousel = ({
   scrollPrevPage: () => void;
   isFirstPage: boolean;
   isLastPage: boolean;
+  scrollAreaRef: (el: HTMLElement | null) => void;
 } => {
+  const [scrollAreaRef, setScrollAreaRef] = React.useState<HTMLElement | null>(
+    null,
+  );
   const [carouselItems, setCarouselItems] = React.useState<Element[]>([]);
   const [visibleIndexes, setVisibleIndexes] = React.useState(
     new Set<number>([0]),
   );
 
   useEffect(() => {
-    if (rootRef.current) {
-      const C = Array.from(rootRef.current.children);
+    if (scrollAreaRef) {
+      scrollAreaRef.style.scrollSnapType = `${axis} mandatory`;
+      scrollAreaRef.style.overflow = 'auto';
+      scrollAreaRef.style.scrollBehavior = 'smooth';
+      scrollAreaRef.style.display = 'flex';
+
+      const C = Array.from(scrollAreaRef.children);
       C.forEach((el) => {
         (el as HTMLElement).style.scrollSnapAlign = snapPosition;
       });
 
       setCarouselItems(C);
       const options = {
-        root: rootRef.current,
+        root: scrollAreaRef,
         // I found that sometimes the intersectionRatio is like 0.98999 for fully visible elements,
         // wrong rounding maybe caused by the snap scroll engine??
         threshold: [1.0, 0.98],
@@ -57,7 +66,7 @@ const useCarousel = ({
         observer.observe(target);
       });
     }
-  }, [rootRef.current]);
+  }, [scrollAreaRef]);
 
   const sortedVisibleIndexesArray = Array.from(visibleIndexes.values()).sort(
     (a, b) => a - b,
@@ -72,44 +81,57 @@ const useCarousel = ({
   const scrollToIndex: ScrollToIndexProps = (index) => {
     carouselItems[index].scrollIntoView({
       behavior: 'smooth',
-      block: 'nearest',
-      inline: 'start',
+      block: snapPosition,
+      inline: snapPosition,
     });
   };
+
   const scrollNext = () => {
-    rootRef.current?.scrollBy({
+    scrollAreaRef?.scrollBy({
       left: carouselItems[sortedVisibleIndexesArray[0]].getBoundingClientRect()
         .width,
+      top: carouselItems[sortedVisibleIndexesArray[0]].getBoundingClientRect()
+        .height,
       behavior: 'smooth',
     });
   };
   const scrollPrev = () => {
-    rootRef.current?.scrollBy({
+    scrollAreaRef?.scrollBy({
       left: -carouselItems[
         sortedVisibleIndexesArray[0] - 1
       ].getBoundingClientRect().width,
+      top: -carouselItems[
+        sortedVisibleIndexesArray[0] - 1
+      ].getBoundingClientRect().height,
       behavior: 'smooth',
     });
   };
 
   const scrollNextPage = () => {
-    rootRef.current?.scrollBy({
+    scrollAreaRef?.scrollBy({
       left: sortedVisibleIndexesArray.reduce((acc, curr) => {
         return acc + carouselItems[curr].getBoundingClientRect().width;
+      }, 0),
+      top: sortedVisibleIndexesArray.reduce((acc, curr) => {
+        return acc + carouselItems[curr].getBoundingClientRect().height;
       }, 0),
       behavior: 'smooth',
     });
   };
 
   const scrollPrevPage = () => {
-    rootRef.current?.scrollBy({
+    scrollAreaRef?.scrollBy({
       left: -sortedVisibleIndexesArray.reduce((acc, curr) => {
         return acc + carouselItems[curr].getBoundingClientRect().width;
+      }, 0),
+      top: -sortedVisibleIndexesArray.reduce((acc, curr) => {
+        return acc + carouselItems[curr].getBoundingClientRect().height;
       }, 0),
       behavior: 'smooth',
     });
   };
   return {
+    scrollAreaRef: setScrollAreaRef,
     visibleIndexes: sortedVisibleIndexesArray,
     scrollNext,
     scrollPrev,

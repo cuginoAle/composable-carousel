@@ -2,29 +2,9 @@ import React from 'react';
 import { Carousel } from '../';
 
 // Some dummy items to fill the carousel:
-const items = new Array(20).fill(0).map((_, index) => {
-  return (
-    <a
-      href="https://picsum.photos"
-      key={index}
-      className="block h-96 overflow-hidden rounded-md w-96 relative"
-      // style={{ width: Math.random() * 300 + 200, maxWidth: '100%' }}
-    >
-      <img
-        className="block object-cover w-full h-full object-center "
-        src={`https://picsum.photos/seed/${Math.random() * 10}/600/300`}
-        alt=""
-      />
-      <span className="absolute left-1/2 top-1/2 text-5xl opacity-50 text-red-800">
-        {index}
-      </span>
-    </a>
-  );
-});
+const items = new Array(20).fill(0);
 
 const Carousel1 = () => {
-  const rootRef = React.useRef<HTMLUListElement>(null);
-
   const {
     scrollToIndex,
     scrollNextPage,
@@ -34,46 +14,67 @@ const Carousel1 = () => {
     isFirstPage,
     isLastPage,
     visibleIndexes,
+    scrollAreaRef,
   } = Carousel.useCarousel({
-    rootRef,
-    snapPosition: 'start',
+    snapPosition: 'center',
+    axis: 'x',
   });
 
   return (
-    <div className="relative">
-      <Carousel.Root ref={rootRef} className="gap-4 pb-8">
-        {items.map((node, index) => (
-          <Carousel.Slide key={index}>
+    <div className="relative flex flex-col gap-8">
+      <ul ref={scrollAreaRef} className="gap-4 pb-8">
+        {items.map((_node, index) => (
+          <li key={index}>
             <div
               className={`
+              max-w-full
               shrink-0 rounded-md shadow-sm shadow-neutral-800 duration-500
               transition-all ${
                 visibleIndexes.includes(index) ? 'opacity-100' : 'opacity-20'
               }`}
             >
-              {node}
+              <a
+                href="https://picsum.photos"
+                key={index}
+                className="block h-96 w-96 overflow-hidden rounded-md relative"
+                // style={{ width: Math.random() * 300 + 200, maxWidth: '100%' }}
+              >
+                <img
+                  className="block object-cover w-full h-full object-center "
+                  src={`https://picsum.photos/seed/${
+                    Math.random() * 10
+                  }/600/300`}
+                  alt=""
+                />
+                <span className="absolute flex items-center justify-center top-2 left-2 text-3xl font-extrabold text-red-800 bg-white bg-opacity-75 h-12 w-12 rounded-full">
+                  {index}
+                </span>
+              </a>
             </div>
-          </Carousel.Slide>
+          </li>
         ))}
-      </Carousel.Root>
-      <div className="flex gap-2">
-        <button disabled={isFirstPage} onClick={scrollPrev}>
-          ⬅️
-        </button>
+      </ul>
+      <div className="flex gap-2 flex-col items-start">
+        <div className="flex gap-2">
+          <button disabled={isFirstPage} onClick={scrollPrev}>
+            ⬅️
+          </button>
 
-        <button disabled={isLastPage} onClick={scrollNext}>
-          ➡️
-        </button>
-
-        <button disabled={isLastPage} onClick={() => scrollNextPage()}>
-          ➡️➡️
-        </button>
-        <button disabled={isFirstPage} onClick={() => scrollPrevPage()}>
-          ⬅️⬅️
-        </button>
+          <button disabled={isLastPage} onClick={scrollNext}>
+            ➡️
+          </button>
+        </div>
+        <div className="flex gap-2">
+          <button disabled={isFirstPage} onClick={() => scrollPrevPage()}>
+            ⬅️⬅️
+          </button>
+          <button disabled={isLastPage} onClick={() => scrollNextPage()}>
+            ➡️➡️
+          </button>
+        </div>
 
         <button disabled={isLastPage} onClick={() => scrollToIndex(12)}>
-          ➡️➡️
+          12
         </button>
       </div>
     </div>
