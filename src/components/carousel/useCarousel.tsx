@@ -79,7 +79,7 @@ const useCarousel = ({
   );
 
   const scrollToIndex: ScrollToIndexProps = (index) => {
-    carouselItems[index].scrollIntoView({
+    carouselItems[index]?.scrollIntoView({
       behavior: 'smooth',
       block: snapPosition,
       inline: snapPosition,
@@ -88,9 +88,9 @@ const useCarousel = ({
 
   const scrollNext = () => {
     scrollAreaRef?.scrollBy({
-      left: carouselItems[sortedVisibleIndexesArray[0]].getBoundingClientRect()
+      left: carouselItems[sortedVisibleIndexesArray[0]]?.getBoundingClientRect()
         .width,
-      top: carouselItems[sortedVisibleIndexesArray[0]].getBoundingClientRect()
+      top: carouselItems[sortedVisibleIndexesArray[0]]?.getBoundingClientRect()
         .height,
       behavior: 'smooth',
     });
@@ -99,10 +99,10 @@ const useCarousel = ({
     scrollAreaRef?.scrollBy({
       left: -carouselItems[
         sortedVisibleIndexesArray[0] - 1
-      ].getBoundingClientRect().width,
+      ]?.getBoundingClientRect().width,
       top: -carouselItems[
         sortedVisibleIndexesArray[0] - 1
-      ].getBoundingClientRect().height,
+      ]?.getBoundingClientRect().height,
       behavior: 'smooth',
     });
   };
