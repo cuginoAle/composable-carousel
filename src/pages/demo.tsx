@@ -1,13 +1,8 @@
-import { useCarousel } from '../useCarousel';
-import { Button } from '../sub-components/button';
-import { Pagination } from '../sub-components/pagination';
+import { useCarousel } from '../components/carousel/useCarousel';
+import { Button } from '../components/carousel/sub-components/button';
+import { Pagination } from '../components/carousel/sub-components/pagination';
 
-// Some dummy items to fill the carousel:
-const items = new Array(20)
-  .fill(0)
-  .map(() => `https://picsum.photos/seed/${Math.random() * 10}/600/300`);
-
-const Demo = () => {
+const Demo = ({ items }: { items: string[] }) => {
   const {
     scrollAreaRef,
     scrollNext,
@@ -22,11 +17,11 @@ const Demo = () => {
   });
 
   return (
-    <>
+    <div>
       <div className="relative flex flex-col gap-8">
         <ul ref={scrollAreaRef} className="gap-4 py-2">
           {items.map((url, index) => (
-            <li key={index}>
+            <li key={index} className="max-w-full">
               <div
                 className={`
               max-w-full
@@ -38,7 +33,7 @@ const Demo = () => {
                 <a
                   href="https://picsum.photos"
                   key={index}
-                  className="block h-96 w-96 overflow-hidden rounded-md relative"
+                  className="block h-96 w-96 max-w-full overflow-hidden rounded-md relative"
                 >
                   <img
                     className="block object-cover w-full h-full object-center "
@@ -79,7 +74,7 @@ const Demo = () => {
           onClick={scrollToIndex}
         />
       </div>
-    </>
+    </div>
   );
 };
 

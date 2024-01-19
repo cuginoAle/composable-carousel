@@ -1,7 +1,12 @@
-import { BuildingBlocks } from './components/carousel/pre-assembled/building-blocks';
-import { Demo } from './components/carousel/pre-assembled/demo';
+import { BuildingBlocks } from './pages/building-blocks';
+import { Demo } from './pages/demo';
 
 import './tailwind.output.css';
+
+// Some dummy items to fill the carousel:
+const items = new Array(20)
+  .fill(0)
+  .map(() => `https://picsum.photos/seed/${Math.random() * 10}/600/300`);
 
 const pages = {
   default: (
@@ -17,7 +22,7 @@ const pages = {
   ),
   one: (
     <div className="flex flex-col gap-6">
-      <Demo />
+      <Demo items={items} />
 
       <div>
         <a className="px-4 py-1 bg-slate-300 rounded" href="/">

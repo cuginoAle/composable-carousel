@@ -1,7 +1,7 @@
-import { Section } from '../section';
-import { Button } from '../sub-components/button';
-import { Pagination } from '../sub-components/pagination';
-import { useCarousel } from '../useCarousel';
+import { Section } from '../components/carousel/section';
+import { Button } from '../components/carousel/sub-components/button';
+import { Pagination } from '../components/carousel/sub-components/pagination';
+import { useCarousel } from '../components/carousel/useCarousel';
 
 // Some dummy items to fill the carousel:
 const items = new Array(20).fill(0).map(() => ({
@@ -23,27 +23,7 @@ const BuildingBlocks = () => {
 
   return (
     <div className="flex flex-col gap-12">
-      <h1 className="text-4xl font-thin">Building blocks:</h1>
-      <Section label="Scrollable area">
-        <ul ref={scrollAreaRef} className="gap-4 ">
-          {items.map((item, index) => (
-            <li key={index}>
-              <a
-                href="https://picsum.photos"
-                key={index}
-                className="block h-60 w-60 overflow-hidden rounded-md relative"
-                // style={{ width: item.width }}
-              >
-                <img
-                  className="block object-cover w-full h-full object-center "
-                  src={item.url}
-                  alt=""
-                />
-              </a>
-            </li>
-          ))}
-        </ul>
-      </Section>
+      <h1 className="text-4xl font-thin">Carousel building blocks:</h1>
 
       <Section label="Business logic">
         <div className="flex gap-2 items-center">
@@ -71,6 +51,27 @@ const BuildingBlocks = () => {
             />
           </Section>
         </div>
+      </Section>
+
+      <Section label="Scrollable area">
+        <ul ref={scrollAreaRef} className="gap-4">
+          {items.map((item, index) => (
+            <li key={index} className="max-w-full">
+              <a
+                href="https://picsum.photos"
+                key={index}
+                className="block h-60 overflow-hidden w-60 max-w-full rounded-md relative"
+                // style={{ width: item.width }}
+              >
+                <img
+                  className="block object-cover w-full h-full object-center "
+                  src={item.url}
+                  alt=""
+                />
+              </a>
+            </li>
+          ))}
+        </ul>
       </Section>
     </div>
   );

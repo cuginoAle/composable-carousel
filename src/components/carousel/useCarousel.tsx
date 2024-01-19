@@ -79,6 +79,7 @@ const useCarousel = ({
     carouselItems.length - 1,
   );
 
+  // TODO: use scrollTo instead of scrollIntoView
   const scrollToIndex: ScrollToIndexProps = (index) => {
     carouselItems[index]?.scrollIntoView({
       behavior: 'smooth',
