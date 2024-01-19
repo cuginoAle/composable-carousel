@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 interface UseCarouselProps {
-  snapPosition?: 'start' | 'end' | 'center';
+  snapPosition?: ScrollLogicalPosition;
   axis?: 'x' | 'y';
 }
 type ScrollToIndexProps = (index: number) => void;
@@ -67,7 +67,7 @@ const useCarousel = ({
         observer.observe(target);
       });
     }
-  }, [scrollAreaRef]);
+  }, [scrollAreaRef, snapPosition]);
 
   const sortedVisibleIndexesArray = Array.from(visibleIndexes.values()).sort(
     (a, b) => a - b,

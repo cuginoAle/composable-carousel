@@ -20,8 +20,10 @@ const Pagination = ({
           <li key={index} className="page-item">
             <button
               onClick={() => onClick(index)}
-              className={`text-xs w-2 h-2 bg-black bg-opacity-20 flex rounded-full ${
-                visibleIndexes.includes(index) ? 'bg-opacity-60' : ''
+              className={`text-xs w-2 h-2 bg-black bg-opacity-20 flex rounded-full  ${
+                visibleIndexes.includes(index)
+                  ? 'bg-opacity-60 ring-2 ring-gray-300'
+                  : ''
               }`}
             />
           </li>

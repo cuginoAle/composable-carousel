@@ -3,7 +3,7 @@ import { Button } from '../components/carousel/sub-components/button';
 import { Pagination } from '../components/carousel/sub-components/pagination';
 import { useCarousel } from '../components/carousel/useCarousel';
 
-// Some dummy items to fill the carousel:
+// Some dummy items to feed the carousel:
 const items = new Array(20).fill(0).map(() => ({
   url: 'https://placehold.co/240',
   width: Math.random() * 300 + 200,

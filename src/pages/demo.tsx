@@ -1,8 +1,13 @@
 import { useCarousel } from '../components/carousel/useCarousel';
 import { Button } from '../components/carousel/sub-components/button';
 import { Pagination } from '../components/carousel/sub-components/pagination';
+import { TriStateToggle } from '../components/tri-state-toggle';
+import { useState } from 'react';
 
 const Demo = ({ items }: { items: string[] }) => {
+  const [snapPosition, setSnapPosition] =
+    useState<ScrollLogicalPosition>('start');
+
   const {
     scrollAreaRef,
     scrollNext,
@@ -12,13 +17,13 @@ const Demo = ({ items }: { items: string[] }) => {
     visibleIndexes,
     scrollToIndex,
   } = useCarousel({
-    snapPosition: 'center',
+    snapPosition: snapPosition,
     axis: 'x',
   });
 
   return (
-    <div>
-      <div className="relative flex flex-col gap-8">
+    <div className="flex flex-col gap-2">
+      <div className="relative">
         <ul ref={scrollAreaRef} className="gap-4 py-2">
           {items.map((url, index) => (
             <li key={index} className="max-w-full">
@@ -31,7 +36,7 @@ const Demo = ({ items }: { items: string[] }) => {
               }`}
               >
                 <a
-                  href="https://picsum.photos"
+                  href=""
                   key={index}
                   className="block h-96 w-96 max-w-full overflow-hidden rounded-md relative"
                 >
@@ -67,12 +72,15 @@ const Demo = ({ items }: { items: string[] }) => {
           </Button>
         )}
       </div>
-      <div className="flex justify-center items-center gap-2">
+      <div className="flex justify-center items-center gap-2 relative h-6">
         <Pagination
           visibleIndexes={visibleIndexes}
           itemCount={items.length}
           onClick={scrollToIndex}
         />
+        <div className="absolute right-0">
+          <TriStateToggle onChange={setSnapPosition} />
+        </div>
       </div>
     </div>
   );
