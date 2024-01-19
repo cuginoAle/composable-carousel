@@ -1,4 +1,4 @@
-import { Carousel } from '..';
+import { useCarousel } from '../useCarousel';
 import { Button } from '../sub-components/button';
 import { Pagination } from '../sub-components/pagination';
 
@@ -7,16 +7,16 @@ const items = new Array(20)
   .fill(0)
   .map(() => `https://picsum.photos/seed/${Math.random() * 10}/600/300`);
 
-const Carousel2 = () => {
+const Demo = () => {
   const {
+    scrollAreaRef,
     scrollNext,
     scrollPrev,
     isFirstPage,
     isLastPage,
     visibleIndexes,
     scrollToIndex,
-    scrollAreaRef,
-  } = Carousel.useCarousel({
+  } = useCarousel({
     snapPosition: 'center',
     axis: 'x',
   });
@@ -72,7 +72,7 @@ const Carousel2 = () => {
           </Button>
         )}
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center items-center gap-2">
         <Pagination
           visibleIndexes={visibleIndexes}
           itemCount={items.length}
@@ -83,4 +83,4 @@ const Carousel2 = () => {
   );
 };
 
-export { Carousel2 };
+export { Demo };

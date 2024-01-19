@@ -36,6 +36,7 @@ const useCarousel = ({
       scrollAreaRef.style.overflow = 'auto';
       scrollAreaRef.style.scrollBehavior = 'smooth';
       scrollAreaRef.style.display = 'flex';
+      scrollAreaRef.style.flexDirection = axis === 'x' ? 'row' : 'column';
 
       const C = Array.from(scrollAreaRef.children);
       C.forEach((el) => {
