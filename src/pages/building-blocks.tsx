@@ -1,4 +1,4 @@
-import { Section } from '../components/carousel/section';
+import { Section } from '../components/section';
 import { Button } from '../components/carousel/sub-components/button';
 import { Pagination } from '../components/carousel/sub-components/pagination';
 import { useCarousel } from '../components/carousel/useCarousel';

@@ -78,6 +78,7 @@ const Demo = ({ items }: { items: string[] }) => {
           itemCount={items.length}
           onClick={scrollToIndex}
         />
+
         <div className="absolute right-0">
           <TriStateToggle onChange={setSnapPosition} />
         </div>
