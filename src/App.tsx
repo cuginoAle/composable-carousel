@@ -1,3 +1,4 @@
+import { BBC } from './pages/bbc';
 import { BuildingBlocks } from './pages/building-blocks';
 import { Demo } from './pages/demo';
 import { TabbedMenu } from './pages/tabbed_menu';
@@ -37,18 +38,22 @@ const pages = {
     <div className="flex flex-col gap-6">
       <BuildingBlocks />
 
-      <div className="flex gap-2">
+      <div className="flex gap-2 m-6">
         <a className="px-4 py-2 bg-slate-300 rounded" href="/one">
           Image carousel
         </a>
         <a className="px-4 py-2 bg-slate-300 rounded" href="/two">
           Tabbed menu
         </a>
+
+        <a className="px-4 py-2 bg-slate-300 rounded" href="/three">
+          BBC
+        </a>
       </div>
     </div>
   ),
   one: (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 p-8">
       <Demo items={items} />
 
       <div>
@@ -59,8 +64,19 @@ const pages = {
     </div>
   ),
   two: (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 p-8">
       <TabbedMenu items={tabbedMenuItems} />
+
+      <div>
+        <a className="px-4 py-1 bg-slate-300 rounded" href="/">
+          Back
+        </a>
+      </div>
+    </div>
+  ),
+  three: (
+    <div className="flex flex-col gap-6">
+      <BBC items={items} />
 
       <div>
         <a className="px-4 py-1 bg-slate-300 rounded" href="/">
@@ -73,9 +89,5 @@ const pages = {
 export default function App() {
   const hash = window.location.pathname.slice(1) as keyof typeof pages;
 
-  return (
-    <div className="flex flex-col gap-4 p-10">
-      {pages[hash] || pages.default}
-    </div>
-  );
+  return pages[hash] || pages.default;
 }

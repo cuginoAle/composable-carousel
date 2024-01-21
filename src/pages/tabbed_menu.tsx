@@ -16,24 +16,26 @@ const TabbedMenu = ({
   });
 
   return (
-    <div className="flex flex-col gap-1">
-      <div className="flex gap-2 relative">
-        <TabMenu
-          items={items.map((item) => item.label)}
-          selectedIndex={visibleIndexes[0]}
-          onClick={scrollToIndex}
-        />
-      </div>
-      <div className="relative">
-        <ul ref={scrollAreaRef} className="gap-1">
-          {items.map((item, index) => (
-            <li key={index} className="basis-full shrink-0">
-              <div className={`p-24 shrink-0 rounded-sm bg-slate-100 h-full`}>
-                {item.content}
-              </div>
-            </li>
-          ))}
-        </ul>
+    <div className="flex">
+      <div className="flex flex-col gap-1">
+        <div className="flex gap-2 relative">
+          <TabMenu
+            items={items.map((item) => item.label)}
+            selectedIndex={visibleIndexes[0]}
+            onClick={scrollToIndex}
+          />
+        </div>
+        <div className="relative">
+          <ul ref={scrollAreaRef} className="gap-1">
+            {items.map((item, index) => (
+              <li key={index} className="basis-full shrink-0">
+                <div className={`p-24 shrink-0 rounded-sm bg-slate-100 h-full`}>
+                  {item.content}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
