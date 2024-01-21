@@ -3,12 +3,16 @@ import React, { useEffect } from 'react';
 interface UseCarouselProps {
   snapPosition?: ScrollLogicalPosition;
   axis?: 'x' | 'y';
+  rootMargin?: string;
+  scrollPadding?: string;
 }
 type ScrollToIndexProps = (index: number) => void;
 
 const useCarousel = ({
   snapPosition = 'start',
   axis = 'x',
+  rootMargin,
+  scrollPadding,
 }: UseCarouselProps): {
   visibleIndexes: number[];
   scrollToIndex: ScrollToIndexProps;
@@ -37,6 +41,7 @@ const useCarousel = ({
       scrollAreaRef.style.scrollBehavior = 'smooth';
       scrollAreaRef.style.display = 'flex';
       scrollAreaRef.style.flexDirection = axis === 'x' ? 'row' : 'column';
+      scrollAreaRef.style.scrollPadding = scrollPadding || '0px';
 
       const C = Array.from(scrollAreaRef.children);
       C.forEach((el) => {
@@ -49,6 +54,7 @@ const useCarousel = ({
         // I found that sometimes the intersectionRatio is like 0.98999 for fully visible elements,
         // wrong rounding maybe caused by the snap scroll engine??
         threshold: [1.0, 0.98],
+        rootMargin,
       };
 
       const observer = new IntersectionObserver((e) => {
@@ -66,8 +72,14 @@ const useCarousel = ({
       C.forEach((target) => {
         observer.observe(target);
       });
+
+      return () => {
+        C.forEach((target) => {
+          observer.unobserve(target);
+        });
+      };
     }
-  }, [scrollAreaRef, snapPosition]);
+  }, [scrollAreaRef, snapPosition, rootMargin, scrollPadding]);
 
   const sortedVisibleIndexesArray = Array.from(visibleIndexes.values()).sort(
     (a, b) => a - b,

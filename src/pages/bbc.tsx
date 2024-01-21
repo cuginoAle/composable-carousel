@@ -1,9 +1,13 @@
 import { useCarousel } from '../components/carousel/useCarousel';
 import { Button } from '../components/carousel/sub-components/button';
+import { useEffect, useState } from 'react';
 
-const twilightArea = '192px'; //'calc(calc(100vw - 1080px) / 2)';
-
+const getTwilightAreaWidth = () => {
+  return Math.max(192, (window.innerWidth - 1280) / 2);
+};
 const BBC = ({ items }: { items: string[] }) => {
+  const [twilightAreaWidth, setTwilightAreaWidth] = useState(0);
+
   const {
     scrollAreaRef,
     scrollNext,
@@ -14,7 +18,24 @@ const BBC = ({ items }: { items: string[] }) => {
   } = useCarousel({
     snapPosition: 'start',
     axis: 'x',
+    scrollPadding: `0 ${twilightAreaWidth}px 0 ${twilightAreaWidth}px`,
   });
+
+  console.log('twilightAreaWidth', twilightAreaWidth);
+
+  useEffect(() => {
+    setTwilightAreaWidth(getTwilightAreaWidth());
+
+    const handleResize = () => {
+      setTwilightAreaWidth(getTwilightAreaWidth());
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <div className="flex flex-col gap-2 h-full bg-black pt-8">
@@ -23,40 +44,23 @@ const BBC = ({ items }: { items: string[] }) => {
           ref={scrollAreaRef}
           className="gap-4 py-2"
           style={{
-            paddingLeft: `clamp(192px, ${twilightArea}, ${twilightArea})`,
-            paddingRight: `clamp(184px, ${twilightArea}, ${twilightArea})`,
+            padding: `0 ${twilightAreaWidth}px`,
           }}
         >
-          <li
-            key={'first'}
-            className={`h-2 shrink-0`}
-            style={{
-              height: '2px',
-              width: `clamp(192px, ${twilightArea}, ${twilightArea})`,
-            }}
-          />
-
           {items.map((url, index) => (
             <li
               key={index}
               style={{
-                width: `clamp(192px, ${twilightArea}, ${twilightArea})`,
+                width: '192px',
               }}
-              className={`max-w-full shrink-0
-                ${
-                  ''
-                  // index === 0 ? `ml-8` : ''
-                }
-              `}
+              className={`max-w-full shrink-0`}
             >
               <div
                 className={`
               max-w-full
               shrink-0 rounded-md shadow-sm shadow-neutral-800 duration-500
               transition-all ${
-                visibleIndexes.includes(index + 1)
-                  ? 'opacity-100'
-                  : 'opacity-40'
+                visibleIndexes.includes(index) ? 'opacity-100' : 'opacity-40'
               }`}
               >
                 <a
@@ -81,13 +85,13 @@ const BBC = ({ items }: { items: string[] }) => {
         <div
           className="bg-black bg-opacity-50 absolute left-0 top-0 bottom-0"
           style={{
-            width: `clamp(192px, ${twilightArea}, ${twilightArea})`,
+            width: `clamp(192px, ${twilightAreaWidth}px, ${twilightAreaWidth}px)`,
           }}
         />
         <div
           className="bg-black bg-opacity-50 absolute right-0 top-0 bottom-0"
           style={{
-            width: `clamp(176px, ${twilightArea}, ${twilightArea})`,
+            width: `clamp(176px, ${twilightAreaWidth}px, ${twilightAreaWidth}px)`,
           }}
         >
           <Button
