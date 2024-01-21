@@ -10,11 +10,13 @@ const getTwilightAreaWidth = (minWidth: number) => {
 };
 const BBC = ({ items }: { items: string[] }) => {
   const [twilightAreaWidth, setTwilightAreaWidth] = useState('');
+  const [isMobile, setIsMobile] = useState(true);
 
   const {
     scrollAreaRef,
-    scrollNext,
-    scrollPrev,
+    scrollNextPage,
+    scrollPrevPage,
+
     isFirstPage,
     isLastPage,
     visibleIndexes,
@@ -28,10 +30,14 @@ const BBC = ({ items }: { items: string[] }) => {
     setTwilightAreaWidth(getTwilightAreaWidth(slideWidth));
 
     const handleResize = () => {
-      setTwilightAreaWidth(getTwilightAreaWidth(slideWidth));
+      setTwilightAreaWidth(
+        getTwilightAreaWidth(window.innerWidth < 768 ? 60 : slideWidth),
+      );
+      setIsMobile(window.innerWidth < 768);
     };
 
     window.addEventListener('resize', handleResize);
+    handleResize();
 
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -39,7 +45,7 @@ const BBC = ({ items }: { items: string[] }) => {
   }, []);
 
   return (
-    <div className="flex flex-col gap-2 h-full bg-black pt-8">
+    <div className="flex flex-col gap-2 h-full bg-black py-8">
       <div className="relative">
         <ul
           ref={scrollAreaRef}
@@ -86,30 +92,34 @@ const BBC = ({ items }: { items: string[] }) => {
         <div
           className="bg-black bg-opacity-50 absolute left-0 top-0 bottom-0"
           style={{
-            width: `clamp(${slideWidth}px, ${twilightAreaWidth}, ${twilightAreaWidth})`,
+            width: twilightAreaWidth,
           }}
         />
         <div
           className="bg-black bg-opacity-50 absolute right-0 top-0 bottom-0"
           style={{
-            width: `clamp(${slideWidth}px, ${twilightAreaWidth}, ${twilightAreaWidth})`,
+            width: twilightAreaWidth,
           }}
         >
-          <Button
-            disabled={isFirstPage}
-            onClick={scrollPrev}
-            className="absolute top-1/2 -left-2 -translate-x-full -translate-y-1/2"
-          >
-            &#8249;
-          </Button>
+          {!isMobile && (
+            <>
+              <Button
+                disabled={isFirstPage}
+                onClick={scrollPrevPage}
+                className="absolute top-1/2 -left-2 -translate-x-full -translate-y-1/2 enabled:hover:bg-white enabled:hover:text-black"
+              >
+                &#8249;
+              </Button>
 
-          <Button
-            disabled={isLastPage}
-            onClick={scrollNext}
-            className="absolute top-1/2 left-2 -translate-y-1/2"
-          >
-            &#8250;
-          </Button>
+              <Button
+                disabled={isLastPage}
+                onClick={scrollNextPage}
+                className="absolute top-1/2 left-2 -translate-y-1/2 enabled:hover:bg-white enabled:hover:text-black"
+              >
+                &#8250;
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </div>

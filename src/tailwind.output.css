@@ -879,12 +879,13 @@ video {
   padding-bottom: 0.5rem;
 }
 
-.pt-12 {
-  padding-top: 3rem;
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
-.pt-8 {
-  padding-top: 2rem;
+.pt-12 {
+  padding-top: 3rem;
 }
 
 .text-3xl {
@@ -1005,4 +1006,14 @@ html {
 
 :disabled {
   opacity: 0.35;
+}
+
+.enabled\:hover\:bg-white:hover:enabled {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.enabled\:hover\:text-black:hover:enabled {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
 }
