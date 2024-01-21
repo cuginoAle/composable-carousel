@@ -2,11 +2,14 @@ import { useCarousel } from '../components/carousel/useCarousel';
 import { Button } from '../components/carousel/sub-components/button';
 import { useEffect, useState } from 'react';
 
-const getTwilightAreaWidth = () => {
-  return Math.max(192, (window.innerWidth - 1280) / 2);
+const maxViewportWidth = 1280;
+const slideWidth = 192;
+
+const getTwilightAreaWidth = (minWidth: number) => {
+  return `${Math.max(minWidth, (window.innerWidth - maxViewportWidth) / 2)}px`;
 };
 const BBC = ({ items }: { items: string[] }) => {
-  const [twilightAreaWidth, setTwilightAreaWidth] = useState(0);
+  const [twilightAreaWidth, setTwilightAreaWidth] = useState('');
 
   const {
     scrollAreaRef,
@@ -18,16 +21,14 @@ const BBC = ({ items }: { items: string[] }) => {
   } = useCarousel({
     snapPosition: 'start',
     axis: 'x',
-    scrollPadding: `0 ${twilightAreaWidth}px 0 ${twilightAreaWidth}px`,
+    scrollPadding: `0 ${twilightAreaWidth} 0 ${twilightAreaWidth}`,
   });
 
-  console.log('twilightAreaWidth', twilightAreaWidth);
-
   useEffect(() => {
-    setTwilightAreaWidth(getTwilightAreaWidth());
+    setTwilightAreaWidth(getTwilightAreaWidth(slideWidth));
 
     const handleResize = () => {
-      setTwilightAreaWidth(getTwilightAreaWidth());
+      setTwilightAreaWidth(getTwilightAreaWidth(slideWidth));
     };
 
     window.addEventListener('resize', handleResize);
@@ -44,14 +45,14 @@ const BBC = ({ items }: { items: string[] }) => {
           ref={scrollAreaRef}
           className="gap-4 py-2"
           style={{
-            padding: `0 ${twilightAreaWidth}px`,
+            padding: `0 ${twilightAreaWidth}`,
           }}
         >
           {items.map((url, index) => (
             <li
               key={index}
               style={{
-                width: '192px',
+                width: `${slideWidth}px`,
               }}
               className={`max-w-full shrink-0`}
             >
@@ -85,13 +86,13 @@ const BBC = ({ items }: { items: string[] }) => {
         <div
           className="bg-black bg-opacity-50 absolute left-0 top-0 bottom-0"
           style={{
-            width: `clamp(192px, ${twilightAreaWidth}px, ${twilightAreaWidth}px)`,
+            width: `clamp(${slideWidth}px, ${twilightAreaWidth}, ${twilightAreaWidth})`,
           }}
         />
         <div
           className="bg-black bg-opacity-50 absolute right-0 top-0 bottom-0"
           style={{
-            width: `clamp(176px, ${twilightAreaWidth}px, ${twilightAreaWidth}px)`,
+            width: `clamp(${slideWidth}px, ${twilightAreaWidth}, ${twilightAreaWidth})`,
           }}
         >
           <Button
