@@ -11,7 +11,6 @@ const getTwilightAreaWidth = (minWidth: number = 0) => {
 const BBC = ({ items }: { items: string[] }) => {
   const [leftTwilightAreaWidth, setLeftTwilightAreaWidth] = useState('');
   const [rightTwilightAreaWidth, setRightTwilightAreaWidth] = useState('');
-  const [isMobile, setIsMobile] = useState(true);
 
   const {
     scrollAreaRef,
@@ -36,7 +35,6 @@ const BBC = ({ items }: { items: string[] }) => {
         getTwilightAreaWidth(window.innerWidth < 768 ? 60 : slideWidth),
       );
       setLeftTwilightAreaWidth(getTwilightAreaWidth());
-      setIsMobile(window.innerWidth < 768);
     };
 
     window.addEventListener('resize', handleResize);
@@ -64,13 +62,13 @@ const BBC = ({ items }: { items: string[] }) => {
           eaque culpa sequi.
         </div>
       </div>
-      <div className=" py-8 flex flex-col gap-2 h-full bg-black">
+      <div className="py-4 flex flex-col gap-2 h-full bg-black">
         <div className="relative">
           <ul
             ref={scrollAreaRef}
-            className="gap-4 py-2"
+            className="gap-4"
             style={{
-              padding: `0 ${rightTwilightAreaWidth} 0 ${leftTwilightAreaWidth}`,
+              padding: `8px ${rightTwilightAreaWidth} 8px ${leftTwilightAreaWidth}`,
             }}
           >
             {items.map((url, index) => (
@@ -79,7 +77,7 @@ const BBC = ({ items }: { items: string[] }) => {
                 style={{
                   width: `${slideWidth}px`,
                 }}
-                className={`max-w-full shrink-0`}
+                className={`max-w-full shrink-0  hover:ring-8 ring-gray-400  rounded-md`}
               >
                 <div
                   className={`
@@ -120,25 +118,23 @@ const BBC = ({ items }: { items: string[] }) => {
               width: rightTwilightAreaWidth,
             }}
           >
-            {!isMobile && (
-              <>
-                <Button
-                  disabled={isFirstPage}
-                  onClick={scrollPrevPage}
-                  className="absolute top-1/2 -left-2 -translate-x-full -translate-y-1/2 enabled:hover:bg-white enabled:hover:text-black"
-                >
-                  &#8249;
-                </Button>
+            <>
+              <Button
+                disabled={isFirstPage}
+                onClick={scrollPrevPage}
+                className="absolute top-1/2 -left-1 -translate-x-full -translate-y-1/2 enabled:hover:bg-white enabled:hover:text-black"
+              >
+                &#8249;
+              </Button>
 
-                <Button
-                  disabled={isLastPage}
-                  onClick={scrollNextPage}
-                  className="absolute top-1/2 left-2 -translate-y-1/2 enabled:hover:bg-white enabled:hover:text-black"
-                >
-                  &#8250;
-                </Button>
-              </>
-            )}
+              <Button
+                disabled={isLastPage}
+                onClick={scrollNextPage}
+                className="absolute top-1/2 left-1 -translate-y-1/2 enabled:hover:bg-white enabled:hover:text-black"
+              >
+                &#8250;
+              </Button>
+            </>
           </div>
         </div>
       </div>
