@@ -79,7 +79,7 @@ const pages = {
       <BBC items={items} />
 
       <div>
-        <a className="px-4 py-1 bg-slate-300 rounded" href="/">
+        <a className="px-4 py-1 ml-6 bg-slate-300 rounded" href="/">
           Back
         </a>
       </div>
