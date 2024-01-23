@@ -102,6 +102,8 @@ const useCarousel = ({
   );
 
   const scrollToIndex: ScrollToIndexProps = (index) => {
+    const clampedIndex = Math.max(0, Math.min(index, carouselItems.length));
+
     const viewportSize = scrollAreaRef?.getBoundingClientRect()[
       sizeProp
     ] as number;
@@ -109,7 +111,7 @@ const useCarousel = ({
       sizeProp
     ] as number;
 
-    const item = carouselItems[index] as HTMLElement;
+    const item = carouselItems[clampedIndex] as HTMLElement;
     const offset = axis === 'x' ? item.offsetLeft : item.offsetTop;
 
     const scrollDelta = {
@@ -125,10 +127,10 @@ const useCarousel = ({
   };
 
   const scrollNext = () => {
-    scrollToIndex(nextItemIndex);
+    scrollToIndex(sortedVisibleIndexesArray[0] + 1);
   };
   const scrollPrev = () => {
-    scrollToIndex(prevItemIndex);
+    scrollToIndex(sortedVisibleIndexesArray[0] - 1);
   };
 
   const scrollNextPage = () => {
