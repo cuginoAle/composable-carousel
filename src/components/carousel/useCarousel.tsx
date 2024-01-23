@@ -133,21 +133,24 @@ const useCarousel = ({
     scrollToIndex(sortedVisibleIndexesArray[0] - 1);
   };
 
+  const getVisibleItemsSize = () => {
+    const itemsSize = sortedVisibleIndexesArray.reduce((acc, curr) => {
+      return acc + carouselItems[curr].getBoundingClientRect()[sizeProp];
+    }, 0);
+    const gap = window.getComputedStyle(scrollAreaRef!).gap;
+
+    return itemsSize + (sortedVisibleIndexesArray.length - 1) * parseInt(gap);
+  };
+
   const scrollNextPage = () => {
-    scrollAreaRef?.scrollBy({
-      [posProp]: sortedVisibleIndexesArray.reduce((acc, curr) => {
-        return acc + carouselItems[curr].getBoundingClientRect()[sizeProp];
-      }, 0),
-      behavior: 'smooth',
+    scrollAreaRef?.scrollTo({
+      [posProp]: scrollAreaRef.scrollLeft + getVisibleItemsSize(),
     });
   };
 
   const scrollPrevPage = () => {
-    scrollAreaRef?.scrollBy({
-      [posProp]: -sortedVisibleIndexesArray.reduce((acc, curr) => {
-        return acc + carouselItems[curr].getBoundingClientRect()[sizeProp];
-      }, 0),
-      behavior: 'smooth',
+    scrollAreaRef?.scrollTo({
+      [posProp]: scrollAreaRef.scrollLeft - getVisibleItemsSize(),
     });
   };
   return {
