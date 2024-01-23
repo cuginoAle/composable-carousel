@@ -38,6 +38,9 @@ const useCarousel = ({
     new Set<number>([0]),
   );
 
+  const posProp = axis === 'x' ? 'left' : 'top';
+  const sizeProp = axis === 'x' ? 'width' : 'height';
+
   useEffect(() => {
     if (scrollAreaRef) {
       scrollAreaRef.style.scrollSnapType = `${axis} mandatory`;
@@ -99,7 +102,6 @@ const useCarousel = ({
   );
 
   const scrollToIndex: ScrollToIndexProps = (index) => {
-    const sizeProp = axis === 'x' ? 'width' : 'height';
     const viewportSize = scrollAreaRef?.getBoundingClientRect()[
       sizeProp
     ] as number;
@@ -117,39 +119,22 @@ const useCarousel = ({
     }[snapPosition];
 
     scrollAreaRef?.scrollTo({
-      [axis === 'x' ? 'left' : 'top']: offset + scrollDelta,
+      [posProp]: offset + scrollDelta,
       behavior: 'smooth',
     });
   };
 
   const scrollNext = () => {
-    scrollAreaRef?.scrollBy({
-      left: carouselItems[sortedVisibleIndexesArray[0]]?.getBoundingClientRect()
-        .width,
-      top: carouselItems[sortedVisibleIndexesArray[0]]?.getBoundingClientRect()
-        .height,
-      behavior: 'smooth',
-    });
+    scrollToIndex(nextItemIndex);
   };
   const scrollPrev = () => {
-    scrollAreaRef?.scrollBy({
-      left: -carouselItems[
-        sortedVisibleIndexesArray[0] - 1
-      ]?.getBoundingClientRect().width,
-      top: -carouselItems[
-        sortedVisibleIndexesArray[0] - 1
-      ]?.getBoundingClientRect().height,
-      behavior: 'smooth',
-    });
+    scrollToIndex(prevItemIndex);
   };
 
   const scrollNextPage = () => {
     scrollAreaRef?.scrollBy({
-      left: sortedVisibleIndexesArray.reduce((acc, curr) => {
-        return acc + carouselItems[curr].getBoundingClientRect().width;
-      }, 0),
-      top: sortedVisibleIndexesArray.reduce((acc, curr) => {
-        return acc + carouselItems[curr].getBoundingClientRect().height;
+      [posProp]: sortedVisibleIndexesArray.reduce((acc, curr) => {
+        return acc + carouselItems[curr].getBoundingClientRect()[sizeProp];
       }, 0),
       behavior: 'smooth',
     });
@@ -157,11 +142,8 @@ const useCarousel = ({
 
   const scrollPrevPage = () => {
     scrollAreaRef?.scrollBy({
-      left: -sortedVisibleIndexesArray.reduce((acc, curr) => {
-        return acc + carouselItems[curr].getBoundingClientRect().width;
-      }, 0),
-      top: -sortedVisibleIndexesArray.reduce((acc, curr) => {
-        return acc + carouselItems[curr].getBoundingClientRect().height;
+      [posProp]: -sortedVisibleIndexesArray.reduce((acc, curr) => {
+        return acc + carouselItems[curr].getBoundingClientRect()[sizeProp];
       }, 0),
       behavior: 'smooth',
     });

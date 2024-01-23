@@ -20,6 +20,7 @@ const Demo = ({ items }: { items: string[] }) => {
   } = useCarousel({
     snapPosition: snapPosition,
     axis: 'x',
+    scrollSnapStop: 'always',
   });
 
   const gotoToNextSlide = () => {
@@ -37,7 +38,7 @@ const Demo = ({ items }: { items: string[] }) => {
         clearInterval(interval);
       };
     }
-  }, [isLoopOn, isLastPage]);
+  }, [isLoopOn, isLastPage, scrollNext, scrollToIndex]);
 
   return (
     <div className="flex flex-col gap-2">
