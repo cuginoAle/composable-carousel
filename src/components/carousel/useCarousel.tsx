@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react';
 
+type snapPosition = 'start' | 'center' | 'end';
+
 interface UseCarouselProps {
-  snapPosition?: ScrollLogicalPosition;
+  snapPosition?: snapPosition;
   axis?: 'x' | 'y';
   rootMargin?: string;
   scrollPadding?: string;
+  scrollSnapStop?: 'always' | 'normal';
 }
 type ScrollToIndexProps = (index: number) => void;
 
@@ -13,6 +16,7 @@ const useCarousel = ({
   axis = 'x',
   rootMargin,
   scrollPadding,
+  scrollSnapStop = 'normal',
 }: UseCarouselProps): {
   visibleIndexes: number[];
   scrollToIndex: ScrollToIndexProps;
@@ -42,17 +46,20 @@ const useCarousel = ({
       scrollAreaRef.style.display = 'flex';
       scrollAreaRef.style.flexDirection = axis === 'x' ? 'row' : 'column';
       scrollAreaRef.style.scrollPadding = scrollPadding || '0px';
+      scrollAreaRef.style.position = 'relative'; // this is needed by the offset prop
 
       const C = Array.from(scrollAreaRef.children);
       C.forEach((el) => {
-        (el as HTMLElement).style.scrollSnapAlign = snapPosition;
+        const htmlEl = el as HTMLElement;
+        htmlEl.style.scrollSnapAlign = snapPosition;
+        htmlEl.style.scrollSnapStop = scrollSnapStop;
       });
 
       setCarouselItems(C);
       const options = {
         root: scrollAreaRef,
         // I found that sometimes the intersectionRatio is like 0.98999 for fully visible elements,
-        // wrong rounding maybe caused by the snap scroll engine??
+        // rounding issue maybe caused by the snap scroll engine??
         threshold: [1.0, 0.98],
         rootMargin,
       };
@@ -91,12 +98,27 @@ const useCarousel = ({
     carouselItems.length - 1,
   );
 
-  // TODO: use scrollTo instead of scrollIntoView
   const scrollToIndex: ScrollToIndexProps = (index) => {
-    carouselItems[index]?.scrollIntoView({
+    const sizeProp = axis === 'x' ? 'width' : 'height';
+    const viewportSize = scrollAreaRef?.getBoundingClientRect()[
+      sizeProp
+    ] as number;
+    const itemSize = carouselItems[index]?.getBoundingClientRect()[
+      sizeProp
+    ] as number;
+
+    const item = carouselItems[index] as HTMLElement;
+    const offset = axis === 'x' ? item.offsetLeft : item.offsetTop;
+
+    const scrollDelta = {
+      start: 0,
+      center: -viewportSize / 2 + itemSize / 2,
+      end: -viewportSize + itemSize,
+    }[snapPosition];
+
+    scrollAreaRef?.scrollTo({
+      [axis === 'x' ? 'left' : 'top']: offset + scrollDelta,
       behavior: 'smooth',
-      block: snapPosition,
-      inline: snapPosition,
     });
   };
 
@@ -161,3 +183,4 @@ const useCarousel = ({
 };
 
 export { useCarousel };
+export type { snapPosition };

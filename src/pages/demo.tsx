@@ -1,12 +1,13 @@
-import { useCarousel } from '../components/carousel/useCarousel';
+import { snapPosition, useCarousel } from '../components/carousel/useCarousel';
 import { Button } from '../components/carousel/sub-components/button';
 import { Pagination } from '../components/carousel/sub-components/pagination';
 import { TriStateToggle } from '../components/tri-state-toggle';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Demo = ({ items }: { items: string[] }) => {
-  const [snapPosition, setSnapPosition] =
-    useState<ScrollLogicalPosition>('start');
+  const [isLoopOn, setIsLoopOn] = useState(false);
+
+  const [snapPosition, setSnapPosition] = useState<snapPosition>('start');
 
   const {
     scrollAreaRef,
@@ -20,6 +21,23 @@ const Demo = ({ items }: { items: string[] }) => {
     snapPosition: snapPosition,
     axis: 'x',
   });
+
+  const gotoToNextSlide = () => {
+    if (isLastPage) {
+      scrollToIndex(0);
+    } else {
+      scrollNext();
+    }
+  };
+  useEffect(() => {
+    if (isLoopOn) {
+      const interval = setInterval(gotoToNextSlide, 2000);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [isLoopOn, isLastPage]);
 
   return (
     <div className="flex flex-col gap-2">
@@ -54,23 +72,21 @@ const Demo = ({ items }: { items: string[] }) => {
           ))}
         </ul>
 
-        {!isFirstPage && (
-          <Button
-            onClick={scrollPrev}
-            className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2"
-          >
-            &#8249;
-          </Button>
-        )}
+        <Button
+          disabled={isFirstPage}
+          onClick={scrollPrev}
+          className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2"
+        >
+          &#8249;
+        </Button>
 
-        {!isLastPage && (
-          <Button
-            onClick={scrollNext}
-            className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2"
-          >
-            &#8250;
-          </Button>
-        )}
+        <Button
+          disabled={isLastPage}
+          onClick={scrollNext}
+          className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2"
+        >
+          &#8250;
+        </Button>
       </div>
       <div className="flex justify-center items-center gap-2 relative h-6">
         <Pagination
@@ -83,6 +99,14 @@ const Demo = ({ items }: { items: string[] }) => {
           <TriStateToggle onChange={setSnapPosition} />
         </div>
       </div>
+      <button
+        onClick={() => {
+          if (!isLoopOn) gotoToNextSlide();
+          setIsLoopOn(!isLoopOn);
+        }}
+      >
+        {isLoopOn ? 'Stop' : 'Start'}
+      </button>
     </div>
   );
 };

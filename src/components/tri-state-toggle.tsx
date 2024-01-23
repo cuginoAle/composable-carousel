@@ -1,7 +1,8 @@
 import { CSSProperties, useState } from 'react';
+import { snapPosition } from './carousel/useCarousel';
 type StateType = 0 | 1 | 2;
 
-const snapMap: Record<StateType, ScrollLogicalPosition> = {
+const snapMap: Record<StateType, snapPosition> = {
   0: 'start',
   1: 'center',
   2: 'end',
@@ -17,7 +18,7 @@ const TriStateToggle = ({
   onChange,
   className,
 }: {
-  onChange: (value: ScrollLogicalPosition) => void;
+  onChange: (value: snapPosition) => void;
   className?: string;
 }) => {
   const [state, setState] = useState<StateType>(0);
