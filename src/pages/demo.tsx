@@ -46,17 +46,18 @@ const Demo = ({ items }: { items: string[] }) => {
           {items.map((url, index) => (
             <li key={index} className="max-w-full">
               <div
-                className={`
-              max-w-full
-              shrink-0 rounded-md shadow-sm shadow-neutral-800 duration-500
-              transition-all ${
-                visibleIndexes.includes(index) ? 'opacity-100' : 'opacity-20'
-              }`}
+                className={`max-w-full shrink-0 rounded-md shadow-sm shadow-neutral-800 duration-500
+                  transition-all ${
+                    visibleIndexes.includes(index)
+                      ? 'opacity-100'
+                      : 'opacity-20'
+                  }`}
               >
                 <a
                   href=""
                   key={index}
                   className="block h-96 w-96 max-w-full overflow-hidden rounded-md relative"
+                  onFocus={() => scrollToIndex(index)}
                 >
                   <img
                     className="block object-cover w-full h-full object-center "

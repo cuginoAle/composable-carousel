@@ -16,7 +16,7 @@ const BBC = ({ items }: { items: string[] }) => {
     scrollAreaRef,
     scrollNextPage,
     scrollPrevPage,
-
+    scrollToIndex,
     isFirstPage,
     isLastPage,
     visibleIndexes,
@@ -80,17 +80,18 @@ const BBC = ({ items }: { items: string[] }) => {
                 className={`max-w-full shrink-0  hover:ring-8 ring-gray-400  rounded-md`}
               >
                 <div
-                  className={`
-              max-w-full
-              shrink-0 rounded-md shadow-sm shadow-neutral-800 duration-500
-              transition-all ${
-                visibleIndexes.includes(index) ? 'opacity-100' : 'opacity-40'
-              }`}
+                  className={`max-w-full shrink-0 rounded-md shadow-sm shadow-neutral-800 duration-500
+                  transition-all ${
+                    visibleIndexes.includes(index)
+                      ? 'opacity-100'
+                      : 'opacity-40'
+                  }`}
                 >
                   <a
                     href=""
                     key={index}
                     className="block h-96 w-full max-w-full overflow-hidden rounded-md relative"
+                    onFocus={() => scrollToIndex(index)}
                   >
                     <img
                       className="block object-cover w-full h-full object-center "
