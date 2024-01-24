@@ -45,11 +45,13 @@ const BuildingBlocks = () => {
             </Section>
 
             <Section label="Pagination">
-              <Pagination
-                itemCount={items.length}
-                onClick={scrollToIndex}
-                visibleIndexes={visibleIndexes}
-              />
+              <div className="flex items-center h-full">
+                <Pagination
+                  itemCount={items.length}
+                  onClick={scrollToIndex}
+                  visibleIndexes={visibleIndexes}
+                />
+              </div>
             </Section>
           </div>
         </Section>
@@ -74,6 +76,66 @@ const BuildingBlocks = () => {
             ))}
           </ul>
         </Section>
+        <div className="flex gap-4">
+          <Section label="Core components">
+            <p className="mb-8 text-sm text-orange-800">
+              Atomic elements: single responsibility
+            </p>
+            <div className="flex gap-8 flex-col">
+              <p>React custom hook</p>
+              <p>Navigation Buttons</p>
+              <p>Pagination</p>
+            </div>
+          </Section>
+
+          <p className="text-7xl flex items-center">&#8250;</p>
+
+          <Section label="Composition">
+            <p className="mb-8 text-sm text-orange-800">
+              Composing the building blocks and adding CSS to match the designs
+            </p>
+            <div className="flex gap-2 flex-col">
+              <div className="flex gap-8 flex-col text-sm italic text-green-800">
+                <code>
+                  <pre>
+                    {`
+const PrimayCarousel=(props)=>{                    
+  const {
+    scrollNext,
+    scrollPrev,
+    scrollAreaRef,
+    scrollToIndex,
+    visibleIndexes,
+  } = useCarousel({
+    snapPosition: 'start',
+    axis: 'x',
+  });
+  
+  <div className="relative">
+        <ul ref={scrollAreaRef} className="gap-4 py-2">
+          {items.map((url, index) => (
+            <li key={index} className="max-w-full">
+  ...
+  ...  
+  `}
+                  </pre>
+                </code>
+              </div>
+            </div>
+          </Section>
+
+          <p className="text-7xl flex items-center">&#8250;</p>
+
+          <Section label="Pre-assembled black boxs">
+            <p className="mb-8 text-sm text-orange-800">
+              Convenient components to use in the app
+            </p>
+            <div className="flex gap-8 flex-col text-sm italic text-green-800">
+              <code>{`<PrimaryCarousel items={items} title="New In" />`}</code>
+              <code>{`<SecondaryCarousel items={items} />`}</code>
+            </div>
+          </Section>
+        </div>
       </div>
     </div>
   );

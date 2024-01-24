@@ -16,7 +16,6 @@ const BBC = ({ items }: { items: string[] }) => {
     scrollAreaRef,
     scrollNextPage,
     scrollPrevPage,
-    scrollToIndex,
     isFirstPage,
     isLastPage,
     visibleIndexes,
@@ -91,7 +90,6 @@ const BBC = ({ items }: { items: string[] }) => {
                     href=""
                     key={index}
                     className="block h-96 w-full max-w-full overflow-hidden rounded-md relative"
-                    onFocus={() => scrollToIndex(index)}
                   >
                     <img
                       className="block object-cover w-full h-full object-center "

@@ -11,13 +11,7 @@ type UseCarouselProps = {
 };
 type ScrollToIndexProps = (index: number) => void;
 
-const useCarousel = ({
-  snapPosition = 'start',
-  axis = 'x',
-  rootMargin,
-  scrollPadding,
-  scrollSnapStop = 'normal',
-}: UseCarouselProps = {}): {
+type HookReturnedProps = {
   visibleIndexes: number[];
   scrollToIndex: ScrollToIndexProps;
   prevItemIndex: number;
@@ -30,7 +24,15 @@ const useCarousel = ({
   isLastPage: boolean;
   // pageCount: number;
   scrollAreaRef: (el: HTMLElement | null) => void;
-} => {
+};
+
+const useCarousel = ({
+  snapPosition = 'start',
+  axis = 'x',
+  rootMargin,
+  scrollPadding,
+  scrollSnapStop = 'normal',
+}: UseCarouselProps = {}): HookReturnedProps => {
   const [scrollAreaRef, setScrollAreaRef] = React.useState<HTMLElement | null>(
     null,
   );
