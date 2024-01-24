@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 type snapPosition = 'start' | 'center' | 'end';
 
-interface UseCarouselProps {
+type UseCarouselProps = {
   snapPosition?: snapPosition;
   axis?: 'x' | 'y';
   rootMargin?: string;
   scrollPadding?: string;
   scrollSnapStop?: 'always' | 'normal';
-}
+};
 type ScrollToIndexProps = (index: number) => void;
 
 const useCarousel = ({
@@ -17,7 +17,7 @@ const useCarousel = ({
   rootMargin,
   scrollPadding,
   scrollSnapStop = 'normal',
-}: UseCarouselProps): {
+}: UseCarouselProps = {}): {
   visibleIndexes: number[];
   scrollToIndex: ScrollToIndexProps;
   prevItemIndex: number;
@@ -28,6 +28,7 @@ const useCarousel = ({
   scrollPrevPage: () => void;
   isFirstPage: boolean;
   isLastPage: boolean;
+  // pageCount: number;
   scrollAreaRef: (el: HTMLElement | null) => void;
 } => {
   const [scrollAreaRef, setScrollAreaRef] = React.useState<HTMLElement | null>(
@@ -37,12 +38,14 @@ const useCarousel = ({
   const [visibleIndexes, setVisibleIndexes] = React.useState(
     new Set<number>([0]),
   );
+  // const [pageCount, setPageCount] = React.useState<number>(0);
 
   const posProp = axis === 'x' ? 'left' : 'top';
   const sizeProp = axis === 'x' ? 'width' : 'height';
 
   useEffect(() => {
     if (scrollAreaRef) {
+      // TODO: these lines should be moved somewhere else
       scrollAreaRef.style.scrollSnapType = `${axis} mandatory`;
       scrollAreaRef.style.overflow = 'auto';
       scrollAreaRef.style.scrollBehavior = 'smooth';
@@ -62,7 +65,7 @@ const useCarousel = ({
       const options = {
         root: scrollAreaRef,
         // I found that sometimes the intersectionRatio is like 0.98999 for fully visible elements,
-        // rounding issue maybe caused by the snap scroll engine??
+        // maybe a rounding issue caused by the snap scroll engine??
         threshold: [1.0, 0.98],
         rootMargin,
       };
@@ -76,7 +79,9 @@ const useCarousel = ({
           }
         });
         const newSet = new Set(visibleIndexes.values());
-        if (newSet.size > 0) setVisibleIndexes(newSet);
+        if (newSet.size > 0) {
+          setVisibleIndexes(newSet);
+        }
       }, options);
 
       C.forEach((target) => {
@@ -89,7 +94,14 @@ const useCarousel = ({
         });
       };
     }
-  }, [scrollAreaRef, snapPosition, rootMargin, scrollPadding]);
+  }, [
+    scrollAreaRef,
+    snapPosition,
+    rootMargin,
+    scrollPadding,
+    axis,
+    scrollSnapStop,
+  ]);
 
   const sortedVisibleIndexesArray = Array.from(visibleIndexes.values()).sort(
     (a, b) => a - b,
@@ -129,18 +141,19 @@ const useCarousel = ({
   const scrollNext = () => {
     scrollToIndex(sortedVisibleIndexesArray[0] + 1);
   };
+
   const scrollPrev = () => {
     scrollToIndex(sortedVisibleIndexesArray[0] - 1);
   };
 
-  const getVisibleItemsSize = () => {
+  const getVisibleItemsSize = useCallback(() => {
     const itemsSize = sortedVisibleIndexesArray.reduce((acc, curr) => {
       return acc + carouselItems[curr].getBoundingClientRect()[sizeProp];
     }, 0);
-    const gap = window.getComputedStyle(scrollAreaRef!).gap;
+    const gap = scrollAreaRef ? window.getComputedStyle(scrollAreaRef).gap : '';
 
     return itemsSize + (sortedVisibleIndexesArray.length - 1) * parseInt(gap);
-  };
+  }, [carouselItems, scrollAreaRef, sizeProp, sortedVisibleIndexesArray]);
 
   const scrollNextPage = () => {
     scrollAreaRef?.scrollTo({
@@ -153,6 +166,16 @@ const useCarousel = ({
       [posProp]: scrollAreaRef.scrollLeft - getVisibleItemsSize(),
     });
   };
+
+  // useEffect(() => {
+  //   console.log(scrollAreaRef);
+  //   if (scrollAreaRef) {
+  //     const totalWidth = scrollAreaRef?.scrollWidth || 1;
+
+  //     setPageCount(Math.ceil(totalWidth / getVisibleItemsSize()));
+  //   }
+  // }, [getVisibleItemsSize, scrollAreaRef]);
+
   return {
     scrollAreaRef: setScrollAreaRef,
     visibleIndexes: sortedVisibleIndexesArray,
@@ -163,6 +186,8 @@ const useCarousel = ({
     scrollPrevPage,
     prevItemIndex,
     nextItemIndex,
+    // currentPage,
+    // pageCount,
     isFirstPage: sortedVisibleIndexesArray[0] === 0,
     isLastPage:
       sortedVisibleIndexesArray.slice(-1)[0] === carouselItems.length - 1,
