@@ -130,9 +130,8 @@ const useCarousel = ({
 
     const item = carouselItems[clampedIndex] as HTMLElement;
 
-    const viewportSize = scrollAreaRef.getBoundingClientRect()[
-      sizeProp
-    ] as number;
+    // TODO: this doesn't take into account the scrollPadding!!
+    const viewportSize = scrollAreaRef.getBoundingClientRect()[sizeProp];
 
     const itemSize = item.getBoundingClientRect()[sizeProp] as number;
     const itemOffset = axis === 'x' ? item.offsetLeft : item.offsetTop;
