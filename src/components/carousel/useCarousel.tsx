@@ -113,40 +113,52 @@ const useCarousel = ({
     carouselItems.length - 1,
   );
 
+  const visibleItemsMap = {
+    start: sortedVisibleIndexesArray[0],
+    center:
+      sortedVisibleIndexesArray[
+        Math.floor(sortedVisibleIndexesArray.length / 2)
+      ],
+    end: sortedVisibleIndexesArray.slice(-1)[0],
+  };
+
   const scrollToIndex: ScrollToIndexProps = (index) => {
     const clampedIndex = Math.max(0, Math.min(index, carouselItems.length));
-
-    const viewportSize = scrollAreaRef?.getBoundingClientRect()[
-      sizeProp
-    ] as number;
-    const itemSize = carouselItems[index]?.getBoundingClientRect()[
-      sizeProp
-    ] as number;
+    if (!scrollAreaRef) {
+      return;
+    }
 
     const item = carouselItems[clampedIndex] as HTMLElement;
-    const offset = axis === 'x' ? item.offsetLeft : item.offsetTop;
+
+    const viewportSize = scrollAreaRef.getBoundingClientRect()[
+      sizeProp
+    ] as number;
+
+    const itemSize = item.getBoundingClientRect()[sizeProp] as number;
+    const itemOffset = axis === 'x' ? item.offsetLeft : item.offsetTop;
 
     const scrollDelta = {
       start: 0,
-      center: -viewportSize / 2 + itemSize / 2,
-      end: -viewportSize + itemSize,
+      center: viewportSize / 2 - itemSize / 2,
+      end: viewportSize - itemSize,
     }[snapPosition];
 
     scrollAreaRef?.scrollTo({
-      [posProp]: offset + scrollDelta,
+      [posProp]: itemOffset - scrollDelta,
       behavior: 'smooth',
     });
   };
 
   const scrollNext = () => {
-    scrollToIndex(sortedVisibleIndexesArray[0] + 1);
+    scrollToIndex(visibleItemsMap[snapPosition] + 1);
   };
 
   const scrollPrev = () => {
-    scrollToIndex(sortedVisibleIndexesArray[0] - 1);
+    scrollToIndex(visibleItemsMap[snapPosition] - 1);
   };
 
   const getVisibleItemsSize = useCallback(() => {
+    // this could be refactored to be the delta between the last visible item offset (+ its size) and the first visible item offset
     const itemsSize = sortedVisibleIndexesArray.reduce((acc, curr) => {
       return acc + carouselItems[curr].getBoundingClientRect()[sizeProp];
     }, 0);

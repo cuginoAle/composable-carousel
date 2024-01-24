@@ -20,7 +20,6 @@ const Demo = ({ items }: { items: string[] }) => {
   } = useCarousel({
     snapPosition: snapPosition,
     axis: 'x',
-    scrollSnapStop: 'always',
   });
 
   const gotoToNextSlide = () => {
