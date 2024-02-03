@@ -66,9 +66,9 @@ const useCarousel = ({
       setCarouselItems(C);
       const options = {
         root: scrollAreaRef,
-        // I found that sometimes the intersectionRatio is like 0.98999 for fully visible elements,
+        // I found that sometimes the intersectionRatio is like 9999 for fully visible elements,
         // maybe a rounding issue caused by the snap scroll engine??
-        threshold: [1.0, 0.98],
+        threshold: [1.0, 0.99],
         rootMargin,
       };
 

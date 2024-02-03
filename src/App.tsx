@@ -1,12 +1,13 @@
 import { BBC } from './pages/bbc';
 import { BuildingBlocks } from './pages/building-blocks';
 import { Demo } from './pages/demo';
+import { OsxFinder } from './pages/osx_finder';
 import { TabbedMenu } from './pages/tabbed_menu';
 
 import './tailwind.output.css';
 
 // Some dummy items to fill the carousel:
-const items = new Array(20)
+const items = new Array(40)
   .fill(0)
   .map(() => `https://picsum.photos/seed/${Math.random() * 10}/600/300`);
 
@@ -49,6 +50,10 @@ const pages = {
         <a className="px-4 py-2 bg-slate-300 rounded" href="/three">
           BBC
         </a>
+
+        <a className="px-4 py-2 bg-slate-300 rounded" href="/four">
+          Osx Finder
+        </a>
       </div>
     </div>
   ),
@@ -77,6 +82,17 @@ const pages = {
   three: (
     <div className="flex flex-col gap-6">
       <BBC items={items} />
+
+      <div>
+        <a className="px-4 py-1 ml-6 bg-slate-300 rounded" href="/">
+          Back
+        </a>
+      </div>
+    </div>
+  ),
+  four: (
+    <div className="flex flex-col gap-6">
+      <OsxFinder items={items} />
 
       <div>
         <a className="px-4 py-1 ml-6 bg-slate-300 rounded" href="/">
