@@ -19,6 +19,7 @@ const OsxFinder = ({ items }: { items: string[] }) => {
     isFirstPage,
     isLastPage,
     visibleIndexes,
+    scrollAreaStyle,
   } = useCarousel({
     snapPosition: 'center',
     axis: 'x',
@@ -66,6 +67,7 @@ const OsxFinder = ({ items }: { items: string[] }) => {
             ref={scrollAreaRef}
             className="gap-4"
             style={{
+              ...scrollAreaStyle,
               padding: `8px ${rightTwilightAreaWidth} 8px ${leftTwilightAreaWidth}`,
             }}
           >
@@ -78,8 +80,7 @@ const OsxFinder = ({ items }: { items: string[] }) => {
                 className={`max-w-full shrink-0 hover:ring-8 focus-within:ring-8 ring-gray-400 hover:ring-gray-700 rounded-md`}
               >
                 <div
-                  className={`max-w-full shrink-0 rounded-md shadow-sm shadow-neutral-800 duration-500
-                  origin-center
+                  className={`max-w-full shrink-0 rounded-md shadow-sm shadow-neutral-800 duration-500 origin-center
                   transition-all ${
                     visibleIndexes.includes(index)
                       ? 'opacity-100 scale-100'

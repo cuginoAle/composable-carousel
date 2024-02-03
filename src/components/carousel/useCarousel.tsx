@@ -24,6 +24,7 @@ type HookReturnedProps = {
   isLastPage: boolean;
   // pageCount: number;
   scrollAreaRef: (el: HTMLElement | null) => void;
+  scrollAreaStyle?: React.CSSProperties;
 };
 
 const useCarousel = ({
@@ -47,15 +48,6 @@ const useCarousel = ({
 
   useEffect(() => {
     if (scrollAreaRef) {
-      // TODO: these lines should be moved somewhere else
-      scrollAreaRef.style.scrollSnapType = `${axis} mandatory`;
-      scrollAreaRef.style.overflow = 'auto';
-      scrollAreaRef.style.scrollBehavior = 'smooth';
-      scrollAreaRef.style.display = 'flex';
-      scrollAreaRef.style.flexDirection = axis === 'x' ? 'row' : 'column';
-      scrollAreaRef.style.scrollPadding = scrollPadding || '0px';
-      scrollAreaRef.style.position = 'relative'; // this is needed by the offset prop
-
       const C = Array.from(scrollAreaRef.children);
       C.forEach((el) => {
         const htmlEl = el as HTMLElement;
@@ -66,7 +58,7 @@ const useCarousel = ({
       setCarouselItems(C);
       const options = {
         root: scrollAreaRef,
-        // I found that sometimes the intersectionRatio is like 9999 for fully visible elements,
+        // I found that sometimes the intersectionRatio is like 0.9999 for fully visible elements,
         // maybe a rounding issue caused by the snap scroll engine??
         threshold: [1.0, 0.99],
         rootMargin,
@@ -204,6 +196,15 @@ const useCarousel = ({
     isFirstPage: sortedVisibleIndexesArray[0] === 0,
     isLastPage:
       sortedVisibleIndexesArray.slice(-1)[0] === carouselItems.length - 1,
+    scrollAreaStyle: {
+      display: 'flex',
+      flexDirection: axis === 'x' ? 'row' : 'column',
+      overflow: 'auto',
+      position: 'relative', // this is needed by the offset properties of the children
+      scrollBehavior: 'smooth',
+      scrollPadding: scrollPadding || '0px',
+      scrollSnapType: `${axis} mandatory`,
+    },
   };
 };
 

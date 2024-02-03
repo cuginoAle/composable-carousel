@@ -16,6 +16,7 @@ const BuildingBlocks = () => {
     scrollAreaRef,
     scrollToIndex,
     visibleIndexes,
+    scrollAreaStyle,
   } = useCarousel({
     snapPosition: 'start',
     axis: 'x',
@@ -57,7 +58,7 @@ const BuildingBlocks = () => {
         </Section>
 
         <Section label="Scrollable area">
-          <ul ref={scrollAreaRef} className="gap-4">
+          <ul ref={scrollAreaRef} style={scrollAreaStyle} className="gap-4">
             {items.map((item, index) => (
               <li key={index} className="max-w-full">
                 <a

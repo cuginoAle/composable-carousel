@@ -17,6 +17,7 @@ const Demo = ({ items }: { items: string[] }) => {
     isLastPage,
     visibleIndexes,
     scrollToIndex,
+    scrollAreaStyle,
   } = useCarousel({
     snapPosition: snapPosition,
     axis: 'x',
@@ -47,7 +48,7 @@ const Demo = ({ items }: { items: string[] }) => {
         placeholder="Search..."
         className="border border-slate-600 bg-slate-300 p-1"
       />
-      <aside className="relative">
+      <section className="relative">
         <a
           className="sr-only focus:w-auto focus:h-auto focus:[clip:auto] bg-white p-2 z-10"
           href="#carousel_end"
@@ -55,7 +56,12 @@ const Demo = ({ items }: { items: string[] }) => {
         >
           Skip to carousel end
         </a>
-        <ul id="carousel_start" ref={scrollAreaRef} className="gap-4 py-2">
+        <ul
+          id="carousel_start"
+          ref={scrollAreaRef}
+          style={scrollAreaStyle}
+          className="gap-4 py-2"
+        >
           {items.map((url, index) => (
             <li key={index} className="max-w-full">
               <div
@@ -128,7 +134,7 @@ const Demo = ({ items }: { items: string[] }) => {
         <p id="carousel_end" className="sr-only">
           End of carousel
         </p>
-      </aside>
+      </section>
       <button
         onClick={() => {
           if (!isLoopOn) gotoToNextSlide();

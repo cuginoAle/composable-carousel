@@ -19,6 +19,7 @@ const BBC = ({ items }: { items: string[] }) => {
     isFirstPage,
     isLastPage,
     visibleIndexes,
+    scrollAreaStyle,
   } = useCarousel({
     snapPosition: 'start',
     axis: 'x',
@@ -67,6 +68,7 @@ const BBC = ({ items }: { items: string[] }) => {
             ref={scrollAreaRef}
             className="gap-4"
             style={{
+              ...scrollAreaStyle,
               padding: `8px ${rightTwilightAreaWidth} 8px ${leftTwilightAreaWidth}`,
             }}
           >
