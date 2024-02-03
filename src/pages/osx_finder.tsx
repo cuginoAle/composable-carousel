@@ -3,14 +3,14 @@ import { Button } from '../components/carousel/sub-components/button';
 import { useEffect, useState } from 'react';
 
 const maxViewportWidth = 940;
-const slideWidth = 292;
+const slideWidth = 300;
 
 const getTwilightAreaWidth = (minWidth: number = 0) =>
   `${Math.max(minWidth, (window.innerWidth - maxViewportWidth) / 2)}px`;
 
 const OsxFinder = ({ items }: { items: string[] }) => {
-  const [leftTwilightAreaWidth, setLeftTwilightAreaWidth] = useState('');
-  const [rightTwilightAreaWidth, setRightTwilightAreaWidth] = useState('');
+  const [leftTwilightAreaWidth, setLeftTwilightAreaWidth] = useState('0px');
+  const [rightTwilightAreaWidth, setRightTwilightAreaWidth] = useState('0px');
 
   const {
     scrollAreaRef,
@@ -23,6 +23,7 @@ const OsxFinder = ({ items }: { items: string[] }) => {
     snapPosition: 'center',
     axis: 'x',
     scrollPadding: `0 ${rightTwilightAreaWidth} 0 ${leftTwilightAreaWidth}`,
+    rootMargin: `0px -${rightTwilightAreaWidth} 0px -${leftTwilightAreaWidth}`,
   });
 
   useEffect(() => {
@@ -44,7 +45,7 @@ const OsxFinder = ({ items }: { items: string[] }) => {
 
   return (
     <>
-      <div className="pt-8 max-w-[1280px] mx-auto">
+      <div style={{ maxWidth: maxViewportWidth }} className={`pt-8 mx-auto`}>
         <div className="p-8 bg-slate-200">
           Lorem ipsum dolor, sit amet consectetur adipisicing elit. Obcaecati
           rerum quidem esse perspiciatis? Distinctio, commodi. Dolor culpa quasi
@@ -94,6 +95,7 @@ const OsxFinder = ({ items }: { items: string[] }) => {
                       className="block object-cover w-full flex-shrink-0 basis-1/2 object-center "
                       src={url}
                       alt=""
+                      loading="lazy"
                     />
                     <div className="p-4 text-white flex flex-col gap-2">
                       <h2 className="font-extralight text-2xl">
@@ -143,6 +145,21 @@ const OsxFinder = ({ items }: { items: string[] }) => {
               </Button>
             </>
           </div>
+        </div>
+      </div>
+      <div style={{ maxWidth: maxViewportWidth }} className={`mx-auto`}>
+        <div className="p-8 bg-slate-200">
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Obcaecati
+          rerum quidem esse perspiciatis? Distinctio, commodi. Dolor culpa quasi
+          fuga, numquam ratione deleniti minus nostrum vero temporibus.
+          Praesentium eaque culpa sequi. Lorem ipsum dolor, sit amet consectetur
+          adipisicing elit. Obcaecati rerum quidem esse perspiciatis?
+          Distinctio, commodi. Dolor culpa quasi fuga, numquam ratione deleniti
+          minus nostrum vero temporibus. Praesentium eaque culpa sequi. Lorem
+          ipsum dolor, sit amet consectetur adipisicing elit. Obcaecati rerum
+          quidem esse perspiciatis? Distinctio, commodi. Dolor culpa quasi fuga,
+          numquam ratione deleniti minus nostrum vero temporibus. Praesentium
+          eaque culpa sequi.
         </div>
       </div>
     </>
