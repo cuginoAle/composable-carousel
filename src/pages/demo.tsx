@@ -48,20 +48,20 @@ const Demo = ({ items }: { items: string[] }) => {
         placeholder="Search..."
         className="border border-slate-600 bg-slate-300 p-1"
       />
-      <section className="relative">
+      <section
+        id="carousel_start"
+        aria-label="Carousel"
+        role="region"
+        className="relative"
+      >
         <a
           className="sr-only focus:w-auto focus:h-auto focus:[clip:auto] bg-white p-2 z-10"
           href="#carousel_end"
-          aria-hidden="true"
+          aria-hidden={true}
         >
           Skip to carousel end
         </a>
-        <ul
-          id="carousel_start"
-          ref={scrollAreaRef}
-          style={scrollAreaStyle}
-          className="gap-4 py-2"
-        >
+        <ul ref={scrollAreaRef} style={scrollAreaStyle} className="gap-4 py-2">
           {items.map((url, index) => (
             <li key={index} className="max-w-full">
               <div
@@ -96,19 +96,21 @@ const Demo = ({ items }: { items: string[] }) => {
         </ul>
 
         <Button
+          tabIndex={-1}
           disabled={isFirstPage}
           onClick={scrollPrev}
           className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2"
-          aria-hidden="true"
+          aria-hidden={true}
         >
           &#8249;
         </Button>
 
         <Button
+          tabIndex={-1}
           disabled={isLastPage}
           onClick={scrollNext}
           className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2"
-          aria-hidden="true"
+          aria-hidden={true}
         >
           &#8250;
         </Button>
@@ -117,7 +119,7 @@ const Demo = ({ items }: { items: string[] }) => {
             visibleIndexes={visibleIndexes}
             itemCount={items.length}
             onClick={scrollToIndex}
-            aria-hidden="true"
+            aria-hidden={true}
           />
 
           <div className="absolute right-0">
@@ -127,11 +129,11 @@ const Demo = ({ items }: { items: string[] }) => {
         <a
           className="sr-only focus:w-auto focus:h-auto focus:[clip:auto] bg-white p-2"
           href="#carousel_start"
-          aria-hidden="true"
+          aria-hidden={true}
         >
           Skip to carousel start
         </a>
-        <p id="carousel_end" className="sr-only">
+        <p id="carousel_end" className="sr-only" aria-hidden={true}>
           End of carousel
         </p>
       </section>

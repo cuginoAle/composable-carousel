@@ -11,11 +11,12 @@ const Pagination = ({
   visibleIndexes,
   onClick,
   className,
+  ...rest
 }: PaginationProps) => {
   const dots = new Array(itemCount).fill(0);
 
   return (
-    <nav className={className}>
+    <nav className={className} {...rest}>
       <ul className="flex gap-1">
         {dots.map((_, index) => (
           <li key={index} className="page-item">
