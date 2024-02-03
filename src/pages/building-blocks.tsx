@@ -77,7 +77,7 @@ const BuildingBlocks = () => {
           </ul>
         </Section>
         <div className="flex gap-4">
-          <Section label="Core components">
+          <Section label="Ingredients (core components):">
             <p className="mb-8 text-sm text-orange-800">
               Atomic elements: single responsibility
             </p>
@@ -90,7 +90,7 @@ const BuildingBlocks = () => {
 
           <p className="text-7xl flex items-center">&#8250;</p>
 
-          <Section label="Composition">
+          <Section label="Recipes (composition):">
             <p className="mb-8 text-sm text-orange-800">
               Composing the building blocks and adding CSS to match the designs
             </p>
@@ -126,7 +126,7 @@ const PrimayCarousel=(props)=>{
 
           <p className="text-7xl flex items-center">&#8250;</p>
 
-          <Section label="Pre-assembled black boxs">
+          <Section className="bg-slate-100" label="Use examples:">
             <p className="mb-8 text-sm text-orange-800">
               Convenient components to use in the app
             </p>
